@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Iterator;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -19,11 +17,9 @@ import android.os.Environment;
 
 public class ZhiDaoParse {
 	private String lyric = null;
-	private HashMap<String, Integer> songNames = null;
 	
 	public ZhiDaoParse(String lyric){
 		this.lyric = lyric;
-		this.songNames = new HashMap<String, Integer>();
 	}
 	
 	private String getDefaultUrl(){
@@ -44,7 +40,7 @@ public class ZhiDaoParse {
 		System.out.println("ËÑË÷Á´½Ó:" + url);
 		try {
 			Document document = Jsoup.connect(url).get();
-			//writeObject(document.toString(), "link.txt");
+			writeObject(document.toString(), "link.txt");
 			Elements dt =document.getElementsByAttributeValueContaining("class", "fbig").select("a");
 			/*Iterator<Element> iterator = dt.iterator();
 			while(iterator.hasNext()){
@@ -87,7 +83,7 @@ public class ZhiDaoParse {
 		
 		try {
 			Document document = Jsoup.connect(url).get();
-			//writeObject(document.toString(), "answer.txt");
+			writeObject(document.toString(), "answer.txt");
 			Element bestAnswer = document.getElementsByAttributeValue("class", "t-txt").first();
 			if(bestAnswer == null){
 				bestAnswer = document.getElementsByAttributeValue("class", "content").first();
@@ -95,7 +91,9 @@ public class ZhiDaoParse {
 					bestAnswer = document.getElementsByAttribute("body").first();
 				}
 			}
-			songName = bestAnswer.html();//.ownText();//.replaceAll("<[^>]*>","");
+			if(songName != null){
+				songName = bestAnswer.html();//.ownText();//.replaceAll("<[^>]*>","");
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
